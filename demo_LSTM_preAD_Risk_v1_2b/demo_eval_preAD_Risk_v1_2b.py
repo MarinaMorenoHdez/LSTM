@@ -90,6 +90,12 @@ elif algorit ==3:
     from LSTM_aux.train_eval_TSGAIN_risk_smooth import  evaluate_tsgain_model
     name_model = "./output/LSTM_determ_res_mono_risk_TSGAIN_smooth.pt"    
     
+elif algorit == 4:
+    # Importar el nuevo modelo
+    from LSTM_aux.RGRU_EDCF import RGRU_EDCF
+    # Puedes necesitar un nuevo script de evaluación o adaptar uno existente
+    # from LSTM_aux.train_eval_Jia25 import train_jia25_model, evaluate_jia25
+    name_model = "./output/RGRU_EDCF_model.pt"
     
 # Entrenamiento
 diag_init_train = X_train[:, 0, -1]
@@ -147,7 +153,13 @@ elif algorit == 3:
         num_layers=num_layers
     )
 
-
+elif algorit == 4:
+    model = RGRU_EDCF(
+        input_size=input_size,
+        hidden_size=hidden_size, # Jia usa 64 por defecto
+        num_layers=num_layers,
+        dropout=dropout_rate
+    )
                               
     
         
@@ -178,6 +190,10 @@ elif algorit ==6:
     evaluate_tsgain_model(model, X_test, y_test, mask_y_test_nonan, mask_X_test_nonan, ID_test, diag_init_test, scaler)
     evaluate_tsgain_model(model, X_all, y_all, mask_y_all, mask_X_all, ID_all, diag_init_all, scaler)
 
+elif algorit == 4:
+    # Aquí necesitarás un bucle de entrenamiento que soporte la función de pérdida combinada
+    # descrita en la Ec. 26 del paper (Regresión + Clasificación + Términos cruzados)
+    pass
 
 # Personalization
 # Subject
